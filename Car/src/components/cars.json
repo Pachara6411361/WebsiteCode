@@ -1,0 +1,31 @@
+[
+    {
+      "id": 1,
+      "brand": "Honda",
+      "model": "Accord",
+      "quantity": 20,
+      "price": 500000
+    },
+    {
+      "id": 2,
+      "brand": "Honda",
+      "model": "Civic",
+      "quantity": 30,
+      "price": 400000
+    },
+    {
+      "id": 3,
+      "brand": "Honda",
+      "model": "City",
+      "quantity": 50,
+      "price": 300000
+    },
+    {
+      "id": 4,
+      "brand": "Toyota",
+      "model": "Camry",
+      "quantity": 100,
+      "price": 600000
+    }
+  ]
+  

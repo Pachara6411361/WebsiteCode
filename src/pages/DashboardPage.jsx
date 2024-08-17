@@ -1,31 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
 import { Pie, Bar } from 'react-chartjs-2';
-import { Link } from 'react-router-dom'; // Import Link for navigation
 import carsData from '../components/cars.json';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+} from 'chart.js';
 
-ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+ChartJS.register(
+    ArcElement,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale
+);
 
 const DashboardPage = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        setData(carsData);  // Set the car data from JSON file
+        setData(carsData); // Set the car data from JSON file
     }, []);
 
     // Group cars by brand and model
     const groupedData = data.reduce((acc, car) => {
         if (!acc[car.brand]) {
-            acc[car.brand] = {
-                totalQuantity: 0,
+            acc[car.brand] = {};
+        }
+        if (!acc[car.brand][car.model]) {
+            acc[car.brand][car.model] = {
+                quantity: 0,
                 totalValue: 0,
-                models: []
             };
         }
-        acc[car.brand].totalQuantity += car.quantity;
-        acc[car.brand].totalValue += car.quantity * car.price;
-        acc[car.brand].models.push(car);
+        acc[car.brand][car.model].quantity += car.quantity;
+        acc[car.brand][car.model].totalValue += car.quantity * car.price;
         return acc;
     }, {});
 
@@ -34,23 +49,45 @@ const DashboardPage = () => {
         labels: Object.keys(groupedData),
         datasets: [
             {
-                data: Object.values(groupedData).map(brand => brand.totalQuantity),
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-            }
-        ]
+                data: Object.values(groupedData).map(brand =>
+                    Object.values(brand).reduce((acc, model) => acc + model.quantity, 0)
+                ),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+            },
+        ],
     };
 
-    // Bar chart data for car models by brand
+    // Prepare the bar chart data for stacked chart
+    const models = Array.from(
+        new Set(
+            data.map(car => car.model)
+        )
+    );
+
     const barChartData = {
         labels: Object.keys(groupedData),
-        datasets: Object.keys(groupedData).map((brand, index) => ({
-            label: brand,
-            data: groupedData[brand].models.map(model => model.quantity),
-            backgroundColor: `rgba(75,192,192,${0.2 + index * 0.2})`,
-            borderColor: `rgba(75,192,192,${1})`,
-            borderWidth: 1
-        }))
+        datasets: models.map((model, index) => ({
+            label: model,
+            data: Object.keys(groupedData).map(brand =>
+                groupedData[brand][model] ? groupedData[brand][model].quantity : 0
+            ),
+            backgroundColor: `rgba(${index * 50}, 99, 132, 0.5)`,
+            borderColor: `rgba(${index * 50}, 99, 132, 1)`,
+            borderWidth: 1,
+        })),
+    };
+
+    const barChartOptions = {
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+                beginAtZero: true,
+            },
+        },
     };
 
     return (
@@ -70,12 +107,12 @@ const DashboardPage = () => {
                 <tbody>
                     {Object.keys(groupedData).map((brand, index) => (
                         <React.Fragment key={index}>
-                            {groupedData[brand].models.map((model, modelIndex) => (
+                            {Object.keys(groupedData[brand]).map((model, modelIndex) => (
                                 <tr key={modelIndex}>
                                     <td>{brand}</td>
-                                    <td>{model.model}</td>
-                                    <td>{model.quantity}</td>
-                                    <td>{model.quantity * model.price}</td>
+                                    <td>{model}</td>
+                                    <td>{groupedData[brand][model].quantity}</td>
+                                    <td>{groupedData[brand][model].totalValue}</td>
                                 </tr>
                             ))}
                         </React.Fragment>
@@ -87,12 +124,7 @@ const DashboardPage = () => {
             <Pie data={pieChartData} />
 
             <h3>Car Models by Brand</h3>
-            <Bar data={barChartData} />
-
-            {/* Button to navigate to the Highlighted Car Page */}
-            <Link to="/highlighted-cars">
-                <button className="btn btn-primary mt-3">Go to Highlighted Cars</button>
-            </Link>
+            <Bar data={barChartData} options={barChartOptions} />
         </Container>
     );
 };

@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Container, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import carsRawData from "../data/taladrod-cars.json";
-import CarsSummaryTable from "../components/CarsSummaryTable";
-import CarsSummaryPieChart from "../components/CarsSummaryPieChart";
-import CarsSummaryBarChart from "../components/CarsSummaryBarChart";
-
+import React, { useState, useEffect } from 'react';
+import { Container, Table } from 'react-bootstrap';
+import { Pie, Bar } from 'react-chartjs-2';
+import carsData from '../components/cars.json';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -86,29 +82,39 @@ const DashboardPage = () => {
     <Container>
       <h2>Dashboard</h2>
 
-      <CarsSummaryTable
-        title={"Car Summary by Brand and Model"}
-        groupedData={groupedData}
-      />
+            <h3>Car Summary by Brand and Model</h3>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Quantity</th>
+                        <th>Total Value (Baht)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {Object.keys(groupedData).map((brand, index) => (
+                        <React.Fragment key={index}>
+                            {Object.keys(groupedData[brand]).map((model, modelIndex) => (
+                                <tr key={modelIndex}>
+                                    <td>{brand}</td>
+                                    <td>{model}</td>
+                                    <td>{groupedData[brand][model].quantity}</td>
+                                    <td>{groupedData[brand][model].totalValue}</td>
+                                </tr>
+                            ))}
+                        </React.Fragment>
+                    ))}
+                </tbody>
+            </Table>
 
-      <CarsSummaryPieChart
-        title={"Car Distribution by Brand"}
-        groupedData={groupedData}
-      />
+            <h3>Car Distribution by Brand</h3>
+            <Pie data={pieChartData} />
 
-      <CarsSummaryBarChart
-        title={"Car Models by Brand"}
-        groupedData={groupedData}
-        models={models}
-      />
-
-      <div className="mt-4">
-        <Link to="/highlighted-cars">
-          <Button variant="primary">Go to Highlighted Cars</Button>
-        </Link>
-      </div>
-    </Container>
-  );
+            <h3>Car Models by Brand</h3>
+            <Bar data={barChartData} options={barChartOptions} />
+        </Container>
+    );
 };
 
 export default DashboardPage;

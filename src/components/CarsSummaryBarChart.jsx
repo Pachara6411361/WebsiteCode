@@ -1,58 +1,62 @@
-import React, { useState, useEffect } from "react";
-import Container from "react-bootstrap/Container";
+import React from "react";
 import { Bar } from "react-chartjs-2";
-import Alert from "react-bootstrap/Alert";
 
-const barChartOptions = {
-  scales: {
-    x: {
-      stacked: true,
-    },
-    y: {
-      stacked: true,
-      beginAtZero: true,
-    },
-  },
-};
+const CarsSummaryBarChart = ({ title, groupedData, models }) => {
+  const brands = Object.keys(groupedData);
 
-const CarsSummaryBarChart = ({
-  title = "This is Bar Chart Title",
-  groupedData = {},
-  models = [],
-}) => {
-  const [barChartData, setBarChartData] = useState({});
+  // Generate an array of unique colors
+  const generateUniqueColors = (length) => {
+    const colors = [];
+    for (let i = 0; i < length; i++) {
+      const color = `hsl(${(i * 360) / length}, 70%, 50%)`;
+      colors.push(color);
+    }
+    return colors;
+  };
 
-  useEffect(() => {
-    const data = {
-      labels: Object.keys(groupedData),
-      datasets: models.map((model, index) => ({
-        label: model,
-        data: Object.keys(groupedData).map((brand) =>
-          groupedData[brand][model] ? groupedData[brand][model].quantity : 0
-        ),
-        backgroundColor: `rgba(${index * 50}, 99, 132, 0.5)`,
-        borderColor: `rgba(${index * 50}, 99, 132, 1)`,
-        borderWidth: 1,
-      })),
+  // Generate unique colors for all models
+  const modelColors = generateUniqueColors(models.length);
+
+  // Prepare datasets with unique colors for each model
+  const datasets = models.map((model, modelIndex) => {
+    const modelData = brands.map((brand) => {
+      return groupedData[brand][model]?.quantity || 0;
+    });
+
+    return {
+      label: model,
+      data: modelData,
+      backgroundColor: modelColors[modelIndex],
     };
-    setBarChartData(data);
-  }, [groupedData]);
+  });
 
-  if (Object.keys(groupedData).length === 0) {
-    return (
-      <Container>
-        <h2>{title}</h2>
-        <Alert variant="warning">No cars available to display.</Alert>
-      </Container>
-    );
-  }
+  const data = {
+    labels: brands,
+    datasets: datasets,
+  };
 
-  return (
-    <Container>
-      <h2>{title}</h2>
-      <Bar data={barChartData} options={barChartOptions} />
-    </Container>
-  );
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: title,
+      },
+    },
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
+    },
+  };
+
+  return <Bar data={data} options={options} />;
 };
 
 export default CarsSummaryBarChart;

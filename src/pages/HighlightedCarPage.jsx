@@ -6,6 +6,29 @@ import carsData from "../data/taladrod-cars.json";
 
 const HighlightedCarPage = () => {
   const [highlightedCars, setHighlightedCars] = useState([]);
+  const [allCars, setAllCars] = useState([]);
+
+  useEffect(() => {
+    setAllCars(prepareCarsData(carsData)); // Set the car data from JSON file
+  }, []);
+
+  const prepareCarsData = (carsRawData) => {
+    const cars = [...carsRawData.Cars];
+    const brands = [...carsRawData.MMList];
+
+    cars.map((car) => {
+      car["Brand"] = getCarBrandBybrandID(brands, car.MkID);
+
+      return car;
+    });
+
+    return cars;
+  };
+  const getCarBrandBybrandID = (brands, brandID) => {
+    const brand = brands.find((brand) => brand.mkID === brandID);
+
+    return brand !== undefined ? brand.Name : "N/A";
+  };
 
   useEffect(() => {
     const savedCars = JSON.parse(localStorage.getItem("highlightedCars")) || [];
@@ -29,6 +52,7 @@ const HighlightedCarPage = () => {
     localStorage.setItem("highlightedCars", JSON.stringify(newHighlightedCars));
   };
 
+
   return (
     <Container>
       <h2>Highlighted Cars</h2>
@@ -50,7 +74,7 @@ const HighlightedCarPage = () => {
 
       <h3>All Cars</h3>
       <ListGroup>
-        {carsData.map((car) => (
+        {allCars.map((car) => (
           <ListGroup.Item key={car.Cid}>
             <img src={car.Img100} alt={car.Model} style={{ marginRight: "10px" }} />
             {car.NameMMT} - {car.Province} - {car.Prc}

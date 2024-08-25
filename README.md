@@ -18,8 +18,14 @@ The **Car Market Dashboard** is a simple web app made for market owners to easil
 ### Dashboard Page
 ![Dashboard Page](./img/dashboard.png)
 
+### Pie Chart Page
+![Pie Chart Page](./img/pie-chart.png)
+
+### Bar Chart Page
+![Bar Chart Page](./img/bar-chart.png)
+
 ### Highlighted Cars Page
-![Highlighted Cars Page](./screenshot-highlighted-cars.png)
+![Highlighted Cars Page](./img/highlighted-cars.png)
 
 ## Installation
 

@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 
 function App() {
   return (
-    <HashRouter basename="/WebsiteProject/dist">
+    <HashRouter>
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/highlighted-cars" element={<HighlightedCarPage />} />

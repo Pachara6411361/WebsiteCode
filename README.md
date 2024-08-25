@@ -1,4 +1,4 @@
-Car Market Dashboard
+#Car Market Dashboard
 
 Description
 The Car Market Dashboard is a simple web app made for market owners to easily see and manage their car inventory. It's built using React.js with React Routing and uses Local Storage to save data. The app doesn't need a backend because it gets all the data from a local JSON file.

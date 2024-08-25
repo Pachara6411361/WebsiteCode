@@ -31,15 +31,15 @@ The **Car Market Dashboard** is a simple web app made for market owners to easil
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/your-username/car-market-dashboard.git
+   git clone https://github.com/Pachara6411361/WebsiteProject.git
    cd car-market-dashboard
 2. Install the dependencies:
    ```bash
    npm install
 3. Start the app:
    ```bash
-   npm start
-4. Open the app in your browser at http://localhost:3000.
+   npm run dev
+4. Open the app in your browser at http://localhost:5173/WebsiteProject/dist
 
 ### Technologies Used
 - **React.js**

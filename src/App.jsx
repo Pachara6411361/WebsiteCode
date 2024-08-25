@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 
 function App() {
   return (
-    <Router basename="/WebsiteProject/dist">
+    <Router >
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/highlighted-cars" element={<HighlightedCarPage />} />

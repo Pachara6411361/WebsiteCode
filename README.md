@@ -35,4 +35,17 @@ The **Car Market Dashboard** is a simple web app made for market owners to easil
    npm start
 4. Open the app in your browser at http://localhost:3000.
 
+### Technologies Used
+- **React.js**
+- **React Router**
+- **Chart.js**
+- **Local Storage**
+
+### Team Members
+
+* Pachara Chotiyanont 6411361
+* Jitrada Tepsuttinun 6410725
+* Phutthiphat Tatiyawongsoonthorn 6410457
+
+
 

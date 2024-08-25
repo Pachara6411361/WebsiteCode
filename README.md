@@ -32,7 +32,7 @@ The **Car Market Dashboard** is a simple web app made for market owners to easil
 1. Clone the repo:
    ```bash
    git clone https://github.com/Pachara6411361/WebsiteProject.git
-   cd car-market-dashboard
+   cd WebsiteProject
 2. Install the dependencies:
    ```bash
    npm install
